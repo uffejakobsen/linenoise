@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
             linenoiseSetMultiLine(1);
             printf("Multi-line mode enabled.\n");
         } else if (!strcmp(*argv,"--keycodes")) {
-            linenoisePrintKeyCodes();
+            linenoisePrintKeyCodes(STDIN_FILENO, STDOUT_FILENO);
             exit(0);
         } else {
             fprintf(stderr, "Usage: %s [--multiline] [--keycodes]\n", prgname);

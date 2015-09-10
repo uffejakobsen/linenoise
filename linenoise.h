@@ -9,6 +9,7 @@
  *
  * Copyright (c) 2010-2014, Salvatore Sanfilippo <antirez at gmail dot com>
  * Copyright (c) 2010-2013, Pieter Noordhuis <pcnoordhuis at gmail dot com>
+ * Copyright (c) 2015-2015, Uffe Jakobsen <uffe at uffe dot org>
  *
  * All rights reserved.
  *
@@ -48,18 +49,23 @@ typedef struct linenoiseCompletions {
   char **cvec;
 } linenoiseCompletions;
 
+typedef ssize_t(linenoiseIoReadCallbackPtr_t)(int fd, void *buf, size_t len);
+typedef ssize_t(linenoiseIoWriteCallbackPtr_t)(int fd, const void *buf, size_t len);
+void linenoiseIoSetCallbacks(linenoiseIoReadCallbackPtr_t *pRdFn, linenoiseIoWriteCallbackPtr_t *pWrFn);
+
 typedef void(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
 void linenoiseSetCompletionCallback(linenoiseCompletionCallback *);
 void linenoiseAddCompletion(linenoiseCompletions *, const char *);
 
 char *linenoise(const char *prompt);
+char *linenoiseMain(int stdin_fd, int stdout_fd, const char *prompt);
 int linenoiseHistoryAdd(const char *line);
 int linenoiseHistorySetMaxLen(int len);
 int linenoiseHistorySave(const char *filename);
 int linenoiseHistoryLoad(const char *filename);
-void linenoiseClearScreen(void);
+void linenoiseClearScreen(int ofd);
 void linenoiseSetMultiLine(int ml);
-void linenoisePrintKeyCodes(void);
+void linenoisePrintKeyCodes(int ifd, int ofd);
 
 #ifdef __cplusplus
 }
